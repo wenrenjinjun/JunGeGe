@@ -4,7 +4,9 @@
 
 USER_OBJS :=
 
-LIBS := -lCUnit
+LIBS := -lCUnit  
+
+LIBSA := start/libstart.a
 
 #ifndef CROSS_COMPILE
 #	CROSS_COMPILE= C:/Path/MinGW/bin/

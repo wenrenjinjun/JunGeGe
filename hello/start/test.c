@@ -20,6 +20,7 @@
 #include <CUnit\console.h>
 #include <CUnit\Basic.h>
 #include <CUnit\Mymem.h>
+#include <CUnit\Automated.h>
 
 
 /*-----------------------------------------------------------------------------
@@ -28,27 +29,6 @@
 #define CONSOLE_MODE	0 	 	//	console控制交互界面模式
 #define AUTOMATE_MODE	1 	 	//	自动产生XML文件的模式
 #define BASIC_MODE		2 	 	//	基本模式
-
-#define TEST_REPORT_MODE BASIC_MODE
-
-#if (TEST_REPORT_MODE == CONSOLE_MODE)
-	#define  CU_RUN_TEST() {\
-		CU_console_run_tests();\
-	}
-
-#elif (TEST_REPORT_MODE == AUTOMATE_MODE)
-	#define  CU_RUN_TEST() {\
-		CU_set_output_filename("TestMax");\
-		CU_list_tests_to_file();\
-		CU_automated_run_tests();\
-	}
-
-#elif (TEST_REPORT_MODE == BASIC_MODE)
-	#define  CU_RUN_TEST() {\
-		CU_basic_set_mode(CU_BRM_VERBOSE);\
-		CU_basic_run_tests();\
-	}
-#endif
 
 /*-----------------------------------------------------------------------------
  Section: Constant Definitions
@@ -63,7 +43,7 @@
 /*-----------------------------------------------------------------------------
  Section: Global Variables
  ----------------------------------------------------------------------------*/
-__DECLARE_SUITE(main)
+/* NONE */
 
 /*-----------------------------------------------------------------------------
  Section: Local Function Prototypes
@@ -73,15 +53,14 @@ __DECLARE_SUITE(main)
 /*-----------------------------------------------------------------------------
  Section: Local Variables
  ----------------------------------------------------------------------------*/
-__BEGIN_SUITEMAP_OF_TESTBOOK(other)
-    __REG_SUITE(main)
-__END_SUITEMAP()
+/* NONE */
 
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
 int
-__do_test_fun(void)
+__do_test_fun(CU_SuiteInfo  suite_info[],
+		int mode)
 {
 //	CU_create_new_registry
 
@@ -92,7 +71,7 @@ __do_test_fun(void)
     assert(NULL != CU_get_registry()); 			//返回测试簿指针
     assert(!CU_is_test_running());    			//检测是否在执行
 
-    if(CUE_SUCCESS != CU_register_suites(__TESTBOOK(other)))
+    if(CUE_SUCCESS != CU_register_suites(&suite_info[0]))
     {
         printf("CU_get_error_msg:%s\n", CU_get_error_msg());
         CU_cleanup_registry();
@@ -101,7 +80,24 @@ __do_test_fun(void)
 
 //    CU_pTestRegistry pTestRegistry =  CU_get_registry();
 
-    CU_RUN_TEST();								//启动测试
+    switch(mode)			//启动测试
+    {
+    case CONSOLE_MODE:	 		//	console控制交互界面模式
+		CU_console_run_tests();
+		break;
+
+    case AUTOMATE_MODE: 	 	//	自动产生XML文件的模式
+    	CU_set_output_filename("TestMax");\
+    	CU_list_tests_to_file();\
+    	CU_automated_run_tests();
+    	break;
+
+    case BASIC_MODE	: 	 		//	基本模式
+    	CU_basic_set_mode(CU_BRM_VERBOSE);\
+    	CU_basic_run_tests();\
+    	break;
+    }
+
     CU_cleanup_registry();						//清除注册信息
 	return 0;
 }

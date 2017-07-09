@@ -40,9 +40,14 @@ endif
 # All Target
 	
 all: hello
+
 # Tool invocations
-hello:  $(OBJS) $(USER_OBJS)
-	g++  -o "hello" $(OBJS) $(USER_OBJS)  $(LIBS) 
+hello: $(OBJS)
+	g++  -o "hello" $(OBJS) $(USER_OBJS) $(LIBS)  
+	#make -C start/
+	#g++  -o "hello" $(LIBSA) $(LIBS) 
+	
+	#$(OBJS) $(USER_OBJS)
 
 # Other Targets
 clean:

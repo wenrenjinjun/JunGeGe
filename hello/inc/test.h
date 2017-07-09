@@ -42,9 +42,10 @@
     #define __TESTBOOK(x)  __suites_info_table_##x
 
     //------------------------------ ≤‚ ‘π§≥Ã     -------------------------------//
-    #define __DO_WHITEBOX_TEST() \
-        extern int __do_test_fun(void);\
-        __do_test_fun();
+
+    #define __DO_WHITEBOX_TEST(x , m) \
+		extern int __do_test_fun(CU_SuiteInfo  suite_info[], int mode); \
+		__do_test_fun((x), (m))
 #else
      #define __DO_WHITEBOX_TEST()
 #endif
