@@ -33,7 +33,7 @@ void  create_file(char *filename)
     }
 }
 
-#include "./test.h"
+#include <test.h>
 
 int main(void)
 {
