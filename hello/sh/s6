@@ -1,0 +1,15 @@
+#!/bin/bash 
+for day in Sun Mon Tue Wed Thu Fri Sat
+do
+	echo $day
+done 
+
+#while [condition]
+#do
+	#code block
+#done
+
+#until [condition]
+#do
+#	#code block
+#done
