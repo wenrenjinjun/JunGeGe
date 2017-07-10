@@ -15,6 +15,10 @@ C_DEPS += \
 ./start/main.d \
 ./start/test.d  
 
+objects := $(patsubst %.c,%.o,$(wildcard *.c))
+
+
+
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o:%.c
