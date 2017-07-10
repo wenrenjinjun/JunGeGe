@@ -186,295 +186,160 @@ include $(TOPDIR)/config.mk
 
 ##########################################################################
 ## U-Boot objects....order is important (i.e. start must be first)
-#
-#OBJS  = cpu/$(CPU)/start.o
-#ifeq ($(CPU),i386)
-#OBJS += cpu/$(CPU)/start16.o
-#OBJS += cpu/$(CPU)/resetvec.o
-#endif
-#ifeq ($(CPU),ppc4xx)
-#OBJS += cpu/$(CPU)/resetvec.o
-#endif
-#ifeq ($(CPU),mpc85xx)
-#OBJS += cpu/$(CPU)/resetvec.o
-#endif
-#
-#OBJS := $(addprefix $(obj),$(OBJS))
-#
-#LIBS  = lib_generic/libgeneric.a
-#LIBS += lib_generic/lzma/liblzma.a
-#LIBS += lib_generic/lzo/liblzo.a
+#8.xxx
+#cpu架构
+OBJS  = cpu/$(CPU)/start.o
+ifeq ($(CPU),i386)
+OBJS += cpu/$(CPU)/start16.o
+OBJS += cpu/$(CPU)/resetvec.o
+endif
+ifeq ($(CPU),ppc4xx)
+OBJS += cpu/$(CPU)/resetvec.o
+endif
+ifeq ($(CPU),mpc85xx)
+OBJS += cpu/$(CPU)/resetvec.o
+endif
+
+OBJS := $(addprefix $(obj),$(OBJS))
+
+#lib_generic 通用库
+LIBS  = lib_generic/libgeneric.a
+LIBS += lib_generic/lzma/liblzma.a
+LIBS += lib_generic/lzo/liblzo.a
 #LIBS += $(shell if [ -f board/$(VENDOR)/common/Makefile ]; then echo \
 #	"board/$(VENDOR)/common/lib$(VENDOR).a"; fi)
-#LIBS += cpu/$(CPU)/lib$(CPU).a
-#ifdef SOC
-#LIBS += cpu/$(CPU)/$(SOC)/lib$(SOC).a
-#endif
-#ifeq ($(CPU),ixp)
-#LIBS += cpu/ixp/npe/libnpe.a
-#endif
-#LIBS += lib_$(ARCH)/lib$(ARCH).a
-#LIBS += fs/cramfs/libcramfs.a fs/fat/libfat.a fs/fdos/libfdos.a fs/jffs2/libjffs2.a \
-#	fs/reiserfs/libreiserfs.a fs/ext2/libext2fs.a fs/yaffs2/libyaffs2.a \
-#	fs/ubifs/libubifs.a
-#LIBS += net/libnet.a
-#LIBS += disk/libdisk.a
-#LIBS += drivers/bios_emulator/libatibiosemu.a
-#LIBS += drivers/block/libblock.a
-#LIBS += drivers/dma/libdma.a
-#LIBS += drivers/fpga/libfpga.a
-#LIBS += drivers/gpio/libgpio.a
-#LIBS += drivers/hwmon/libhwmon.a
-#LIBS += drivers/i2c/libi2c.a
-#LIBS += drivers/input/libinput.a
-#LIBS += drivers/misc/libmisc.a
-#LIBS += drivers/mmc/libmmc.a
-#LIBS += drivers/mtd/libmtd.a
-#LIBS += drivers/mtd/nand/libnand.a
-#LIBS += drivers/mtd/onenand/libonenand.a
-#LIBS += drivers/mtd/ubi/libubi.a
-#LIBS += drivers/mtd/spi/libspi_flash.a
-#LIBS += drivers/net/libnet.a
-#LIBS += drivers/net/phy/libphy.a
-#LIBS += drivers/pci/libpci.a
-#LIBS += drivers/pcmcia/libpcmcia.a
-#LIBS += drivers/power/libpower.a
-#LIBS += drivers/spi/libspi.a
-#ifeq ($(CPU),mpc83xx)
-#LIBS += drivers/qe/qe.a
-#endif
-#ifeq ($(CPU),mpc85xx)
-#LIBS += drivers/qe/qe.a
-#LIBS += cpu/mpc8xxx/ddr/libddr.a
-#LIBS += cpu/mpc8xxx/lib8xxx.a
-#endif
-#ifeq ($(CPU),mpc86xx)
-#LIBS += cpu/mpc8xxx/ddr/libddr.a
-#LIBS += cpu/mpc8xxx/lib8xxx.a
-#endif
-#LIBS += drivers/rtc/librtc.a
-#LIBS += drivers/serial/libserial.a
-#LIBS += drivers/twserial/libtws.a
-#LIBS += drivers/usb/gadget/libusb_gadget.a
-#LIBS += drivers/usb/host/libusb_host.a
-#LIBS += drivers/usb/musb/libusb_musb.a
-# 
-## Apollo +
-#LIBS += drivers/usb/slave/libusb_slave.a
-## Apollo -
-#
-#LIBS += drivers/usb/phy/libusb_phy.a
-#LIBS += drivers/video/libvideo.a
-#LIBS += drivers/watchdog/libwatchdog.a
-#LIBS += common/libcommon.a
-#LIBS += libfdt/libfdt.a
-#LIBS += api/libapi.a
-#LIBS += post/libpost.a
-#
-#LIBS := $(addprefix $(obj),$(LIBS))
-#.PHONY : $(LIBS) $(TIMESTAMP_FILE) $(VERSION_FILE)
-#
-#LIBBOARD = board/$(BOARDDIR)/lib$(BOARD).a
-#LIBBOARD := $(addprefix $(obj),$(LIBBOARD))
-#
-## Add GCC lib
-#ifdef USE_PRIVATE_LIBGCC
-#ifeq ("$(USE_PRIVATE_LIBGCC)", "yes")
-#PLATFORM_LIBGCC = -L $(OBJTREE)/lib_$(ARCH) -lgcc
-#else
-#PLATFORM_LIBGCC = -L $(USE_PRIVATE_LIBGCC) -lgcc
-#endif
-#else
-#PLATFORM_LIBGCC = -L $(shell dirname `$(CC) $(CFLAGS) -print-libgcc-file-name`) -lgcc
-#endif
-#PLATFORM_LIBS += $(PLATFORM_LIBGCC)
-#export PLATFORM_LIBS
-#
-## Special flags for CPP when processing the linker script.
-## Pass the version down so we can handle backwards compatibility
-## on the fly.
-#LDPPFLAGS += \
-#	-include $(TOPDIR)/include/u-boot/u-boot.lds.h \
-#	$(shell $(LD) --version | \
-#	  sed -ne 's/GNU ld version \([0-9][0-9]*\)\.\([0-9][0-9]*\).*/-DLD_MAJOR=\1 -DLD_MINOR=\2/p')
-#
-#ifeq ($(CONFIG_NAND_U_BOOT),y)
-#NAND_SPL = nand_spl
-#U_BOOT_NAND = $(obj)u-boot-nand.bin
-#endif
-#
-#ifeq ($(CONFIG_ONENAND_U_BOOT),y)
-#ONENAND_IPL = onenand_ipl
-#U_BOOT_ONENAND = $(obj)u-boot-onenand.bin
-#ONENAND_BIN ?= $(obj)onenand_ipl/onenand-ipl-2k.bin
-#endif
-#
-#__OBJS := $(subst $(obj),,$(OBJS))
-#__LIBS := $(subst $(obj),,$(LIBS)) $(subst $(obj),,$(LIBBOARD))
-#
-##########################################################################
-##########################################################################
-#
-## Always append ALL so that arch config.mk's can add custom ones
-#ALL += $(obj)u-boot.srec $(obj)u-boot.bin $(obj)System.map $(U_BOOT_NAND) $(U_BOOT_ONENAND)
-#
-#all:		$(ALL)
-#
-#$(obj)u-boot.hex:	$(obj)u-boot
-#		$(OBJCOPY) ${OBJCFLAGS} -O ihex $< $@
-#
-#$(obj)u-boot.srec:	$(obj)u-boot
-#		$(OBJCOPY) -O srec $< $@
-#
-#$(obj)u-boot.bin:	$(obj)u-boot
-#		$(OBJCOPY) ${OBJCFLAGS} -O binary $< $@
-#
-#$(obj)u-boot.ldr:	$(obj)u-boot
-#		$(CREATE_LDR_ENV)
-#		$(LDR) -T $(CONFIG_BFIN_CPU) -c $@ $< $(LDR_FLAGS)
-#
-#$(obj)u-boot.ldr.hex:	$(obj)u-boot.ldr
-#		$(OBJCOPY) ${OBJCFLAGS} -O ihex $< $@ -I binary
-#
-#$(obj)u-boot.ldr.srec:	$(obj)u-boot.ldr
-#		$(OBJCOPY) ${OBJCFLAGS} -O srec $< $@ -I binary
-#
-#$(obj)u-boot.img:	$(obj)u-boot.bin
-#		./tools/mkimage -A $(ARCH) -T firmware -C none \
-#		-a $(TEXT_BASE) -e 0 \
-#		-n $(shell sed -n -e 's/.*U_BOOT_VERSION//p' $(VERSION_FILE) | \
-#			sed -e 's/"[	 ]*$$/ for $(BOARD) board"/') \
-#		-d $< $@
-#
-#$(obj)u-boot.imx:       $(obj)u-boot.bin
-#		$(obj)tools/mkimage -n $(IMX_CONFIG) -T imximage \
-#		-e $(TEXT_BASE) -d $< $@
-#
-#$(obj)u-boot.kwb:       $(obj)u-boot.bin
-#		$(obj)tools/mkimage -n $(KWD_CONFIG) -T kwbimage \
-#		-a $(TEXT_BASE) -e $(TEXT_BASE) -d $< $@
-#
-#$(obj)u-boot.sha1:	$(obj)u-boot.bin
-#		$(obj)tools/ubsha1 $(obj)u-boot.bin
-#
-#$(obj)u-boot.dis:	$(obj)u-boot
-#		$(OBJDUMP) -d $< > $@
-#
-#GEN_UBOOT = \
-#		UNDEF_SYM=`$(OBJDUMP) -x $(LIBBOARD) $(LIBS) | \
-#		sed  -n -e 's/.*\($(SYM_PREFIX)__u_boot_cmd_.*\)/-u\1/p'|sort|uniq`;\
-#		cd $(LNDIR) && $(LD) $(LDFLAGS) $$UNDEF_SYM $(__OBJS) \
-#			--start-group $(__LIBS) --end-group $(PLATFORM_LIBS) \
-#			-Map u-boot.map -o u-boot
-#$(obj)u-boot:	depend $(SUBDIRS) $(OBJS) $(LIBBOARD) $(LIBS) $(LDSCRIPT) $(obj)u-boot.lds
-#		$(GEN_UBOOT)
-#ifeq ($(CONFIG_KALLSYMS),y)
-#		smap=`$(call SYSTEM_MAP,u-boot) | \
-#			awk '$$2 ~ /[tTwW]/ {printf $$1 $$3 "\\\\000"}'` ; \
-#		$(CC) $(CFLAGS) -DSYSTEM_MAP="\"$${smap}\"" \
-#			-c common/system_map.c -o $(obj)common/system_map.o
-#		$(GEN_UBOOT) $(obj)common/system_map.o
-#endif
-#
-#$(OBJS):	depend
-#		$(MAKE) -C cpu/$(CPU) $(if $(REMOTE_BUILD),$@,$(notdir $@))
-#
-#$(LIBS):	depend $(SUBDIRS)
-#		$(MAKE) -C $(dir $(subst $(obj),,$@))
-#
-#$(LIBBOARD):	depend $(LIBS)
-#		$(MAKE) -C $(dir $(subst $(obj),,$@))
-#
-#$(SUBDIRS):	depend
-#		$(MAKE) -C $@ all
-#
-#$(LDSCRIPT):	depend
-#		$(MAKE) -C $(dir $@) $(notdir $@)
-#
-#$(obj)u-boot.lds: $(LDSCRIPT)
-#		$(CPP) $(CPPFLAGS) $(LDPPFLAGS) -ansi -D__ASSEMBLY__ -P - <$^ >$@
-#
-#$(NAND_SPL):	$(TIMESTAMP_FILE) $(VERSION_FILE) $(obj)include/autoconf.mk
-#		$(MAKE) -C nand_spl/board/$(BOARDDIR) all
-#
-#$(U_BOOT_NAND):	$(NAND_SPL) $(obj)u-boot.bin
-#		cat $(obj)nand_spl/u-boot-spl-16k.bin $(obj)u-boot.bin > $(obj)u-boot-nand.bin
-#
-#$(ONENAND_IPL):	$(TIMESTAMP_FILE) $(VERSION_FILE) $(obj)include/autoconf.mk
-#		$(MAKE) -C onenand_ipl/board/$(BOARDDIR) all
-#
-#$(U_BOOT_ONENAND):	$(ONENAND_IPL) $(obj)u-boot.bin
-#		cat $(ONENAND_BIN) $(obj)u-boot.bin > $(obj)u-boot-onenand.bin
-#
-#$(VERSION_FILE):
-#		@( printf '#define U_BOOT_VERSION "U-Boot %s%s"\n' "$(U_BOOT_VERSION)" \
-#		 '$(shell $(TOPDIR)/tools/setlocalversion $(TOPDIR))' ) > $@.tmp
-#		@cmp -s $@ $@.tmp && rm -f $@.tmp || mv -f $@.tmp $@
-#
-#$(TIMESTAMP_FILE):
-#		@date +'#define U_BOOT_DATE "%b %d %C%y"' > $@
-#		@date +'#define U_BOOT_TIME "%T"' >> $@
-#
-#gdbtools:
-#		$(MAKE) -C tools/gdb all || exit 1
-#
-#updater:
-#		$(MAKE) -C tools/updater all || exit 1
-#
-#env:
-#		$(MAKE) -C tools/env all MTD_VERSION=${MTD_VERSION} || exit 1
-#
-## Explicitly make _depend in subdirs containing multiple targets to prevent
-## parallel sub-makes creating .depend files simultaneously.
-#depend dep:	$(TIMESTAMP_FILE) $(VERSION_FILE) $(obj)include/autoconf.mk
-#		for dir in $(SUBDIRS) cpu/$(CPU) $(dir $(LDSCRIPT)) ; do \
-#			$(MAKE) -C $$dir _depend ; done
-#
-#TAG_SUBDIRS = $(SUBDIRS)
-#TAG_SUBDIRS += $(dir $(__LIBS))
-#TAG_SUBDIRS += include
-#
-#tags ctags:
-#		ctags -w -o $(obj)ctags `find $(TAG_SUBDIRS) \
-#						-name '*.[chS]' -print`
-#
-#etags:
-#		etags -a -o $(obj)etags `find $(TAG_SUBDIRS) \
-#						-name '*.[chS]' -print`
-#cscope:
-#		find $(TAG_SUBDIRS) -name '*.[chS]' -print > cscope.files
-#		cscope -b -q -k
-#
-#SYSTEM_MAP = \
-#		$(NM) $1 | \
-#		grep -v '\(compiled\)\|\(\.o$$\)\|\( [aUw] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)' | \
-#		LC_ALL=C sort
-#$(obj)System.map:	$(obj)u-boot
-#		@$(call SYSTEM_MAP,$<) > $(obj)System.map
-#
-##
-## Auto-generate the autoconf.mk file (which is included by all makefiles)
-##
-## This target actually generates 2 files; autoconf.mk and autoconf.mk.dep.
-## the dep file is only include in this top level makefile to determine when
-## to regenerate the autoconf.mk file.
-#$(obj)include/autoconf.mk.dep: $(obj)include/config.h include/common.h
-#	@$(XECHO) Generating $@ ; \
-#	set -e ; \
-#	: Generate the dependancies ; \
-#	$(CC) -x c -DDO_DEPS_ONLY -M $(HOSTCFLAGS) $(CPPFLAGS) \
-#		-MQ $(obj)include/autoconf.mk include/common.h > $@
-#
-#$(obj)include/autoconf.mk: $(obj)include/config.h
-#	@$(XECHO) Generating $@ ; \
-#	set -e ; \
-#	: Extract the config macros ; \
-#	$(CPP) $(CFLAGS) -DDO_DEPS_ONLY -dM include/common.h | \
-#		sed -n -f tools/scripts/define2mk.sed > $@.tmp && \
-#	mv $@.tmp $@
-#
-##########################################################################
 
+#cpu 产品
+LIBS += cpu/$(CPU)/lib$(CPU).a
+
+ifdef SOC
+LIBS += cpu/$(CPU)/$(SOC)/lib$(SOC).a
+endif
+
+ifeq ($(CPU),ixp)
+LIBS += cpu/ixp/npe/libnpe.a
+endif
+
+#cpu 通用库
+LIBS += lib_$(ARCH)/lib$(ARCH).a
+
+#文件系统
+LIBS += fs/cramfs/libcramfs.a fs/fat/libfat.a fs/fdos/libfdos.a fs/jffs2/libjffs2.a \
+	fs/reiserfs/libreiserfs.a fs/ext2/libext2fs.a fs/yaffs2/libyaffs2.a \
+	fs/ubifs/libubifs.a
+	
+#网络
+LIBS += net/libnet.a
+
+#磁盘
+LIBS += disk/libdisk.a
+
+#驱动
+LIBS += drivers/bios_emulator/libatibiosemu.a
+LIBS += drivers/block/libblock.a
+LIBS += drivers/dma/libdma.a
+LIBS += drivers/fpga/libfpga.a
+LIBS += drivers/gpio/libgpio.a
+LIBS += drivers/hwmon/libhwmon.a
+LIBS += drivers/i2c/libi2c.a
+LIBS += drivers/input/libinput.a
+LIBS += drivers/misc/libmisc.a
+LIBS += drivers/mmc/libmmc.a
+LIBS += drivers/mtd/libmtd.a
+LIBS += drivers/mtd/nand/libnand.a
+LIBS += drivers/mtd/onenand/libonenand.a
+LIBS += drivers/mtd/ubi/libubi.a
+LIBS += drivers/mtd/spi/libspi_flash.a
+LIBS += drivers/net/libnet.a
+LIBS += drivers/net/phy/libphy.a
+LIBS += drivers/pci/libpci.a
+LIBS += drivers/pcmcia/libpcmcia.a
+LIBS += drivers/power/libpower.a
+LIBS += drivers/spi/libspi.a
+ifeq ($(CPU),mpc83xx)
+LIBS += drivers/qe/qe.a
+endif
+ifeq ($(CPU),mpc85xx)
+LIBS += drivers/qe/qe.a
+LIBS += cpu/mpc8xxx/ddr/libddr.a
+LIBS += cpu/mpc8xxx/lib8xxx.a
+endif
+ifeq ($(CPU),mpc86xx)
+LIBS += cpu/mpc8xxx/ddr/libddr.a
+LIBS += cpu/mpc8xxx/lib8xxx.a
+endif
+LIBS += drivers/rtc/librtc.a
+LIBS += drivers/serial/libserial.a
+LIBS += drivers/twserial/libtws.a
+LIBS += drivers/usb/gadget/libusb_gadget.a
+LIBS += drivers/usb/host/libusb_host.a
+LIBS += drivers/usb/musb/libusb_musb.a
+#LIBS += drivers/usb/slave/libusb_slave.a	# Apollo +
+LIBS += drivers/usb/phy/libusb_phy.a
+LIBS += drivers/video/libvideo.a
+LIBS += drivers/watchdog/libwatchdog.a
+
+#与处理器无关
+LIBS += common/libcommon.a
+
+#扁平设备
+LIBS += libfdt/libfdt.a
+
+#api
+LIBS += api/libapi.a
+
+#上电自检等
+LIBS += post/libpost.a
+
+LIBS := $(addprefix $(obj),$(LIBS))
+.PHONY : $(LIBS) $(TIMESTAMP_FILE) $(VERSION_FILE)
+
+#Board代码
+LIBBOARD = board/$(BOARDDIR)/lib$(BOARD).a
+LIBBOARD := $(addprefix $(obj),$(LIBBOARD))
+
+# Add GCC lib
+ifdef USE_PRIVATE_LIBGCC
+ifeq ("$(USE_PRIVATE_LIBGCC)", "yes")
+PLATFORM_LIBGCC = -L $(OBJTREE)/lib_$(ARCH) -lgcc
+else
+PLATFORM_LIBGCC = -L $(USE_PRIVATE_LIBGCC) -lgcc
+endif
+else
+PLATFORM_LIBGCC = -L $(shell dirname `$(CC) $(CFLAGS) -print-libgcc-file-name`) -lgcc
+endif
+PLATFORM_LIBS += $(PLATFORM_LIBGCC)
+export PLATFORM_LIBS
+
+# Special flags for CPP when processing the linker script.
+# Pass the version down so we can handle backwards compatibility
+# on the fly.
+LDPPFLAGS += \
+	-include $(TOPDIR)/include/u-boot/u-boot.lds.h \
+	$(shell $(LD) --version | \
+	  sed -ne 's/GNU ld version \([0-9][0-9]*\)\.\([0-9][0-9]*\).*/-DLD_MAJOR=\1 -DLD_MINOR=\2/p')
+
+ifeq ($(CONFIG_NAND_U_BOOT),y)
+NAND_SPL = nand_spl
+U_BOOT_NAND = $(obj)u-boot-nand.bin
+endif
+
+ifeq ($(CONFIG_ONENAND_U_BOOT),y)
+ONENAND_IPL = onenand_ipl
+U_BOOT_ONENAND = $(obj)u-boot-onenand.bin
+ONENAND_BIN ?= $(obj)onenand_ipl/onenand-ipl-2k.bin
+endif
+
+__OBJS := $(subst $(obj),,$(OBJS))
+__LIBS := $(subst $(obj),,$(LIBS)) $(subst $(obj),,$(LIBBOARD))
+
+#########################################################################
+#########################################################################
+
+# Always append ALL so that arch config.mk's can add custom ones
+ALL += $(obj)u-boot.srec $(obj)u-boot.bin $(obj)System.map $(U_BOOT_NAND) $(U_BOOT_ONENAND)
+
+#all:		$(ALL)
 all:
 #	@echo "1.设置版本"
 #	@echo ${U_BOOT_VERSION}
@@ -510,18 +375,179 @@ all:
 #	@echo "6.xxx"	
 #	@echo ${ARCH}
 #	@echo ${SUBDIRS}
+#	@echo ""
+#	@echo "7.xxx"	#export	ARCH CPU BOARD VENDOR SOC
+#	@echo ${ARCH}
+#	@echo ${CPU}
+#	@echo ${BOARD}
+#	@echo ${VENDOR}
+#	@echo ${SOC}
+#	@echo ${TOPDIR}
+#	@echo ${MAKE}
+#	@echo ""
+	echo "8.xxx"
+	@echo ${OBJS}
+	@echo ${LIBS}
+	@echo ${obj}		
 	@echo ""
-	@echo "7.xxx"	#export	ARCH CPU BOARD VENDOR SOC
-	@echo ${ARCH}
-	@echo ${CPU}
-	@echo ${BOARD}
-	@echo ${VENDOR}
-	@echo ${SOC}
-	@echo ${TOPDIR}
-	@echo ${MAKE}
-	@echo ""	
+	
+	@echo ${PLATFORM_LIBGCC}
 
 
+$(obj)u-boot.hex:	$(obj)u-boot
+		$(OBJCOPY) ${OBJCFLAGS} -O ihex $< $@
+#
+$(obj)u-boot.srec:	$(obj)u-boot
+		$(OBJCOPY) -O srec $< $@
+#
+$(obj)u-boot.bin:	$(obj)u-boot
+		$(OBJCOPY) ${OBJCFLAGS} -O binary $< $@
+#
+$(obj)u-boot.ldr:	$(obj)u-boot
+		$(CREATE_LDR_ENV)
+		$(LDR) -T $(CONFIG_BFIN_CPU) -c $@ $< $(LDR_FLAGS)
+#
+$(obj)u-boot.ldr.hex:	$(obj)u-boot.ldr
+		$(OBJCOPY) ${OBJCFLAGS} -O ihex $< $@ -I binary
+#
+$(obj)u-boot.ldr.srec:	$(obj)u-boot.ldr
+		$(OBJCOPY) ${OBJCFLAGS} -O srec $< $@ -I binary
+#
+$(obj)u-boot.img:	$(obj)u-boot.bin
+		./tools/mkimage -A $(ARCH) -T firmware -C none \
+		-a $(TEXT_BASE) -e 0 \
+		-n $(shell sed -n -e 's/.*U_BOOT_VERSION//p' $(VERSION_FILE) | \
+			sed -e 's/"[	 ]*$$/ for $(BOARD) board"/') \
+		-d $< $@
+
+$(obj)u-boot.imx:       $(obj)u-boot.bin
+		$(obj)tools/mkimage -n $(IMX_CONFIG) -T imximage \
+		-e $(TEXT_BASE) -d $< $@
+
+$(obj)u-boot.kwb:       $(obj)u-boot.bin
+		$(obj)tools/mkimage -n $(KWD_CONFIG) -T kwbimage \
+		-a $(TEXT_BASE) -e $(TEXT_BASE) -d $< $@
+
+$(obj)u-boot.sha1:	$(obj)u-boot.bin
+		$(obj)tools/ubsha1 $(obj)u-boot.bin
+
+$(obj)u-boot.dis:	$(obj)u-boot
+		$(OBJDUMP) -d $< > $@
+
+GEN_UBOOT = \
+		UNDEF_SYM=`$(OBJDUMP) -x $(LIBBOARD) $(LIBS) | \
+		sed  -n -e 's/.*\($(SYM_PREFIX)__u_boot_cmd_.*\)/-u\1/p'|sort|uniq`;\
+		cd $(LNDIR) && $(LD) $(LDFLAGS) $$UNDEF_SYM $(__OBJS) \
+			--start-group $(__LIBS) --end-group $(PLATFORM_LIBS) \
+			-Map u-boot.map -o u-boot
+$(obj)u-boot:	depend $(SUBDIRS) $(OBJS) $(LIBBOARD) $(LIBS) $(LDSCRIPT) $(obj)u-boot.lds
+		$(GEN_UBOOT)
+ifeq ($(CONFIG_KALLSYMS),y)
+		smap=`$(call SYSTEM_MAP,u-boot) | \
+			awk '$$2 ~ /[tTwW]/ {printf $$1 $$3 "\\\\000"}'` ; \
+		$(CC) $(CFLAGS) -DSYSTEM_MAP="\"$${smap}\"" \
+			-c common/system_map.c -o $(obj)common/system_map.o
+		$(GEN_UBOOT) $(obj)common/system_map.o
+endif
+
+$(OBJS):	depend
+		$(MAKE) -C cpu/$(CPU) $(if $(REMOTE_BUILD),$@,$(notdir $@))
+
+$(LIBS):	depend $(SUBDIRS)
+		$(MAKE) -C $(dir $(subst $(obj),,$@))
+
+$(LIBBOARD):	depend $(LIBS)
+		$(MAKE) -C $(dir $(subst $(obj),,$@))
+#
+$(SUBDIRS):	depend
+		$(MAKE) -C $@ all
+
+$(LDSCRIPT):	depend
+		$(MAKE) -C $(dir $@) $(notdir $@)
+
+$(obj)u-boot.lds: $(LDSCRIPT)
+		$(CPP) $(CPPFLAGS) $(LDPPFLAGS) -ansi -D__ASSEMBLY__ -P - <$^ >$@
+
+$(NAND_SPL):	$(TIMESTAMP_FILE) $(VERSION_FILE) $(obj)include/autoconf.mk
+		$(MAKE) -C nand_spl/board/$(BOARDDIR) all
+
+$(U_BOOT_NAND):	$(NAND_SPL) $(obj)u-boot.bin
+		cat $(obj)nand_spl/u-boot-spl-16k.bin $(obj)u-boot.bin > $(obj)u-boot-nand.bin
+
+$(ONENAND_IPL):	$(TIMESTAMP_FILE) $(VERSION_FILE) $(obj)include/autoconf.mk
+		$(MAKE) -C onenand_ipl/board/$(BOARDDIR) all
+
+$(U_BOOT_ONENAND):	$(ONENAND_IPL) $(obj)u-boot.bin
+		cat $(ONENAND_BIN) $(obj)u-boot.bin > $(obj)u-boot-onenand.bin
+
+$(VERSION_FILE):
+		@( printf '#define U_BOOT_VERSION "U-Boot %s%s"\n' "$(U_BOOT_VERSION)" \
+		 '$(shell $(TOPDIR)/tools/setlocalversion $(TOPDIR))' ) > $@.tmp
+		@cmp -s $@ $@.tmp && rm -f $@.tmp || mv -f $@.tmp $@
+
+$(TIMESTAMP_FILE):
+		@date +'#define U_BOOT_DATE "%b %d %C%y"' > $@
+		@date +'#define U_BOOT_TIME "%T"' >> $@
+
+gdbtools:
+		$(MAKE) -C tools/gdb all || exit 1
+
+updater:
+		$(MAKE) -C tools/updater all || exit 1
+
+env:
+		$(MAKE) -C tools/env all MTD_VERSION=${MTD_VERSION} || exit 1
+
+# Explicitly make _depend in subdirs containing multiple targets to prevent
+# parallel sub-makes creating .depend files simultaneously.
+depend dep:	$(TIMESTAMP_FILE) $(VERSION_FILE) $(obj)include/autoconf.mk
+		for dir in $(SUBDIRS) cpu/$(CPU) $(dir $(LDSCRIPT)) ; do \
+			$(MAKE) -C $$dir _depend ; done
+
+TAG_SUBDIRS = $(SUBDIRS)
+TAG_SUBDIRS += $(dir $(__LIBS))
+TAG_SUBDIRS += include
+
+tags ctags:
+		ctags -w -o $(obj)ctags `find $(TAG_SUBDIRS) \
+						-name '*.[chS]' -print`
+
+etags:
+		etags -a -o $(obj)etags `find $(TAG_SUBDIRS) \
+						-name '*.[chS]' -print`
+cscope:
+		find $(TAG_SUBDIRS) -name '*.[chS]' -print > cscope.files
+		cscope -b -q -k
+
+SYSTEM_MAP = \
+		$(NM) $1 | \
+		grep -v '\(compiled\)\|\(\.o$$\)\|\( [aUw] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)' | \
+		LC_ALL=C sort
+$(obj)System.map:	$(obj)u-boot
+		@$(call SYSTEM_MAP,$<) > $(obj)System.map
+
+#
+# Auto-generate the autoconf.mk file (which is included by all makefiles)
+#
+# This target actually generates 2 files; autoconf.mk and autoconf.mk.dep.
+# the dep file is only include in this top level makefile to determine when
+# to regenerate the autoconf.mk file.
+$(obj)include/autoconf.mk.dep: $(obj)include/config.h include/common.h
+	@$(XECHO) Generating $@ ; \
+	set -e ; \
+	: Generate the dependancies ; \
+	$(CC) -x c -DDO_DEPS_ONLY -M $(HOSTCFLAGS) $(CPPFLAGS) \
+		-MQ $(obj)include/autoconf.mk include/common.h > $@
+
+$(obj)include/autoconf.mk: $(obj)include/config.h
+	@$(XECHO) Generating $@ ; \
+	set -e ; \
+	: Extract the config macros ; \
+	$(CPP) $(CFLAGS) -DDO_DEPS_ONLY -dM include/common.h | \
+		sed -n -f tools/scripts/define2mk.sed > $@.tmp && \
+	mv $@.tmp $@
+
+##########################################################################
 else	# !config.mk
 all:
 #all $(obj)u-boot.hex $(obj)u-boot.srec $(obj)u-boot.bin \
@@ -2147,86 +2173,6 @@ unconfig:
 #	@$(MKCONFIG) -a TQM85xx ppc mpc85xx tqm85xx tqc
 #	@echo "CONFIG_$(@:_config=) = y">>$(obj)include/config.mk;
 #
-#XPEDITE5200_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc85xx xpedite5200 xes
-#
-#XPEDITE5370_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc85xx xpedite5370 xes
-#
-##########################################################################
-### MPC86xx Systems
-##########################################################################
-#
-#MPC8610HPCD_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc86xx mpc8610hpcd freescale
-#
-#MPC8641HPCN_36BIT_config \
-#MPC8641HPCN_config:    unconfig
-#	@mkdir -p $(obj)include
-#	@if [ "$(findstring _36BIT_,$@)" ] ; then \
-#		echo "#define CONFIG_PHYS_64BIT" >>$(obj)include/config.h ; \
-#		$(XECHO) "... enabling 36-bit physical addressing." ; \
-#	fi
-#	@$(MKCONFIG) -a MPC8641HPCN ppc mpc86xx mpc8641hpcn freescale
-#
-#sbc8641d_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc86xx sbc8641d
-#
-#XPEDITE5170_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc86xx xpedite5170 xes
-#
-##########################################################################
-### 74xx/7xx Systems
-##########################################################################
-#
-#AmigaOneG3SE_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc 74xx_7xx AmigaOneG3SE MAI
-#
-#BAB7xx_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc 74xx_7xx bab7xx eltec
-#
-#CPCI750_config:	unconfig
-#	@$(MKCONFIG) CPCI750 ppc 74xx_7xx cpci750 esd
-#
-#DB64360_config:	unconfig
-#	@$(MKCONFIG) DB64360 ppc 74xx_7xx db64360 Marvell
-#
-#DB64460_config:	unconfig
-#	@$(MKCONFIG) DB64460 ppc 74xx_7xx db64460 Marvell
-#
-#ELPPC_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc 74xx_7xx elppc eltec
-#
-#EVB64260_config	\
-#EVB64260_750CX_config:	unconfig
-#	@$(MKCONFIG) EVB64260 ppc 74xx_7xx evb64260
-#
-#mpc7448hpc2_config:  unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc 74xx_7xx mpc7448hpc2 freescale
-#
-#P3G4_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc 74xx_7xx evb64260
-#
-#p3m750_config	\
-#p3m7448_config:		unconfig
-#	@mkdir -p $(obj)include
-#	@if [ "$(findstring 750_,$@)" ] ; then \
-#		echo "#define CONFIG_P3M750" >>$(obj)include/config.h ; \
-#	else \
-#		echo "#define CONFIG_P3M7448" >>$(obj)include/config.h ; \
-#	fi
-#	@$(MKCONFIG) -a p3mx ppc 74xx_7xx p3mx prodrive
-#
-#PCIPPC2_config \
-#PCIPPC6_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc 74xx_7xx pcippc2
-#
-#ppmc7xx_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc 74xx_7xx ppmc7xx
-#
-#ZUMA_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc 74xx_7xx evb64260
-#
 ##========================================================================
 ## ARM
 ##========================================================================
@@ -2249,47 +2195,7 @@ unconfig:
 #shannon_config	:	unconfig
 #	@$(MKCONFIG) $(@:_config=) arm sa1100 shannon
 #
-##########################################################################
-### ARM92xT Systems
-##########################################################################
-#
-#a320evb_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t a320evb faraday a320
-#
-##########################################################################
-### Atmel AT91RM9200 Systems
-##########################################################################
-#
-#at91rm9200dk_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t at91rm9200dk atmel at91rm9200
-#
-#at91rm9200ek_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t at91rm9200ek atmel at91rm9200
-#
-#cmc_pu2_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t cmc_pu2 NULL at91rm9200
-#
-#CPUAT91_RAM_config \
-#CPUAT91_config	:	unconfig
-#	@mkdir -p $(obj)include
-#	@echo "#define CONFIG_$(@:_config=) 1"	>$(obj)include/config.h
-#	@$(MKCONFIG) -a cpuat91 arm arm920t cpuat91 eukrea at91rm9200
-#
-#csb637_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t csb637 NULL at91rm9200
-#
-#eb_cpux9k2_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t eb_cpux9k2 BuS at91
-#
-#kb9202_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t kb9202 NULL at91rm9200
-#
-#m501sk_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t m501sk NULL at91rm9200
-#
-#mp2usb_config	:	unconfig
-#	@$(MKCONFIG) $(@:_config=) arm arm920t mp2usb NULL at91rm9200
-#
+
 ##########################################################################
 ### ARM926EJ-S Systems
 ##########################################################################
