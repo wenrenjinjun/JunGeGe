@@ -339,60 +339,7 @@ __LIBS := $(subst $(obj),,$(LIBS)) $(subst $(obj),,$(LIBBOARD))
 # Always append ALL so that arch config.mk's can add custom ones
 ALL += $(obj)u-boot.srec $(obj)u-boot.bin $(obj)System.map $(U_BOOT_NAND) $(U_BOOT_ONENAND)
 
-#all:		$(ALL)
-all:
-#	@echo "1.设置版本"
-#	@echo ${U_BOOT_VERSION}
-#	@echo ${TIMESTAMP_FILE}
-#	@echo ${VERSION_FILE}
-#	@echo ""
-#	@echo "2.获取主机类型和主机系统"	#export	HOSTARCH HOSTOS SHELL
-#	@echo ${HOSTARCH}
-#	@echo ${HOSTOS}
-#	@echo ${SHELL}
-#	@echo ""
-#	@echo "3.静默模式"
-#	@echo ${VENDOR}
-#	@echo ${MAKEFLAGS}
-#	@echo ${XECHO}
-#	@echo ""
-#	@echo "4.目标目录"	#export	TOPDIR SRCTREE OBJTREE
-#	@echo ${BUILD_DIR}
-##@echo ${saved-output}
-#	echo $(shell pwd)
-#	echo ${CURDIR}
-#	@echo ${OBJTREE}
-#	@echo ${SRCTREE}
-#	@echo ${TOPDIR}
-#	@echo ${LNDIR}
-#	@echo ""
-#	@echo "5.定义MKCONFIG等环境变量"	#export MKCONFIG REMOTE_BUILD
-#	@echo ${MKCONFIG}
-#	@echo ${REMOTE_BUILD}			#export REMOTE_BUILD
-#	@echo ${obj}					#export obj src
-#	@echo ${src}
-#	@echo ""
-#	@echo "6.xxx"	
-#	@echo ${ARCH}
-#	@echo ${SUBDIRS}
-#	@echo ""
-#	@echo "7.xxx"	#export	ARCH CPU BOARD VENDOR SOC
-#	@echo ${ARCH}
-#	@echo ${CPU}
-#	@echo ${BOARD}
-#	@echo ${VENDOR}
-#	@echo ${SOC}
-#	@echo ${TOPDIR}
-#	@echo ${MAKE}
-#	@echo ""
-	echo "8.xxx"
-	@echo ${OBJS}
-	@echo ${LIBS}
-	@echo ${obj}		
-	@echo ""
-	
-	@echo ${PLATFORM_LIBGCC}
-
+all:		$(ALL)
 
 $(obj)u-boot.hex:	$(obj)u-boot
 		$(OBJCOPY) ${OBJCFLAGS} -O ihex $< $@
@@ -532,20 +479,20 @@ $(obj)System.map:	$(obj)u-boot
 # This target actually generates 2 files; autoconf.mk and autoconf.mk.dep.
 # the dep file is only include in this top level makefile to determine when
 # to regenerate the autoconf.mk file.
-$(obj)include/autoconf.mk.dep: $(obj)include/config.h include/common.h
-	@$(XECHO) Generating $@ ; \
-	set -e ; \
-	: Generate the dependancies ; \
-	$(CC) -x c -DDO_DEPS_ONLY -M $(HOSTCFLAGS) $(CPPFLAGS) \
-		-MQ $(obj)include/autoconf.mk include/common.h > $@
-
-$(obj)include/autoconf.mk: $(obj)include/config.h
-	@$(XECHO) Generating $@ ; \
-	set -e ; \
-	: Extract the config macros ; \
-	$(CPP) $(CFLAGS) -DDO_DEPS_ONLY -dM include/common.h | \
-		sed -n -f tools/scripts/define2mk.sed > $@.tmp && \
-	mv $@.tmp $@
+#$(obj)include/autoconf.mk.dep: $(obj)include/config.h include/common.h
+#	@$(XECHO) Generating $@ ; \
+#	set -e ; \
+#	: Generate the dependancies ; \
+#	$(CC) -x c -DDO_DEPS_ONLY -M $(HOSTCFLAGS) $(CPPFLAGS) \
+#		-MQ $(obj)include/autoconf.mk include/common.h > $@
+#
+#$(obj)include/autoconf.mk: $(obj)include/config.h
+#	@$(XECHO) Generating $@ ; \
+#	set -e ; \
+#	: Extract the config macros ; \
+#	$(CPP) $(CFLAGS) -DDO_DEPS_ONLY -dM include/common.h | \
+#		sed -n -f tools/scripts/define2mk.sed > $@.tmp && \
+#	mv $@.tmp $@
 
 ##########################################################################
 else	# !config.mk
@@ -584,90 +531,71 @@ unconfig:
 #========================================================================
 # PowerPC
 #========================================================================
+mini2440_config : unconfig  
+#	@echo ${MKCONFIG}
+#	@echo $(@:_config=) 
+	@$(MKCONFIG) $(@:_config=) arm arm920t mini2440 tekkamanninja s3c24x0  
 
-#digsy_mtc_config \
-#digsy_mtc_LOWBOOT_config	\
-#digsy_mtc_RAMBOOT_config:	unconfig
-#	@mkdir -p $(obj)include
-#	@mkdir -p $(obj)board/digsy_mtc
+test:
+#	@echo "1.设置版本"
+#	@echo ${U_BOOT_VERSION}
+#	@echo ${TIMESTAMP_FILE}
+#	@echo ${VERSION_FILE}
+#	@echo ""
+#	@echo "2.获取主机类型和主机系统"	#export	HOSTARCH HOSTOS SHELL
+#	@echo ${HOSTARCH}
+#	@echo ${HOSTOS}
+#	@echo ${SHELL}
+#	@echo ""
+#	@echo "3.静默模式"
+#	@echo ${VENDOR}
+#	@echo ${MAKEFLAGS}
+#	@echo ${XECHO}
+#	@echo ""
+#	@echo "4.目标目录"	#export	TOPDIR SRCTREE OBJTREE
+#	@echo ${BUILD_DIR}
+##@echo ${saved-output}
+#	echo $(shell pwd)
+#	echo ${CURDIR}
+#	@echo ${OBJTREE}
+#	@echo ${SRCTREE}
+#	@echo ${TOPDIR}
+#	@echo ${LNDIR}
+#	@echo ""
+#	@echo "5.定义MKCONFIG等环境变量"	#export MKCONFIG REMOTE_BUILD
+#	@echo ${MKCONFIG}
+#	@echo ${REMOTE_BUILD}			#export REMOTE_BUILD
+#	@echo ${obj}					#export obj src
+#	@echo ${src}
+#	@echo ""
+#	@echo "6.xxx"	
+#	@echo ${ARCH}
+#	@echo ${SUBDIRS}
+#	@echo ""
+#	@echo "7.xxx"	#export	ARCH CPU BOARD VENDOR SOC
+#	@echo ${ARCH}
+#	@echo ${CPU}
+#	@echo ${BOARD}
+#	@echo ${VENDOR}
+#	@echo ${SOC}
+#	@echo ${TOPDIR}
+#	@echo ${MAKE}
+#	@echo ""
+#	echo "8.xxx"
+#	@echo ${OBJS}
+#	@echo ${LIBS}
+#	@echo ${obj}		
+#	@echo ""
+	
+#	@echo ${PLATFORM_LIBGCC}
+	
+	@echo "----------------test----------------------------------x"
 #	@ >$(obj)include/config.h
-#	@[ -z "$(findstring LOWBOOT_,$@)" ] || \
-#		{ echo "TEXT_BASE = 0xFF000000" >$(obj)board/digsy_mtc/config.tmp ; \
-#		  echo "... with LOWBOOT configuration" ; \
-#		}
-#	@[ -z "$(findstring RAMBOOT_,$@)" ] || \
-#		{ echo "TEXT_BASE = 0x00100000" >$(obj)board/digsy_mtc/config.tmp ; \
-#		  echo "... with RAMBOOT configuration" ; \
-#		}
-#	@$(MKCONFIG) -a digsy_mtc  ppc mpc5xxx digsy_mtc
-#
-#galaxy5200_LOWBOOT_config \
-#galaxy5200_config:	unconfig
-#	@mkdir -p $(obj)include
-#	@echo "#define CONFIG_$(@:_config=) 1" >$(obj)include/config.h
-#	@$(MKCONFIG) -a galaxy5200 ppc mpc5xxx galaxy5200
-#
-#hmi1001_config:	unconfig
-#	@$(MKCONFIG) hmi1001 ppc mpc5xxx hmi1001
-#
-#Lite5200_config				\
-#Lite5200_LOWBOOT_config			\
-#Lite5200_LOWBOOT08_config		\
-#icecube_5200_config			\
-#icecube_5200_LOWBOOT_config		\
-#icecube_5200_LOWBOOT08_config		\
-#icecube_5200_DDR_config			\
-#icecube_5200_DDR_LOWBOOT_config		\
-#icecube_5200_DDR_LOWBOOT08_config	\
-#icecube_5100_config:			unconfig
-#	@mkdir -p $(obj)include
-#	@mkdir -p $(obj)board/icecube
-#	@[ -z "$(findstring LOWBOOT_,$@)" ] || \
-#		{ if [ "$(findstring DDR,$@)" ] ; \
-#			then echo "TEXT_BASE = 0xFF800000" >$(obj)board/icecube/config.tmp ; \
-#			else echo "TEXT_BASE = 0xFF000000" >$(obj)board/icecube/config.tmp ; \
-#		  fi ; \
-#		  $(XECHO) "... with LOWBOOT configuration" ; \
-#		}
-#	@[ -z "$(findstring LOWBOOT08,$@)" ] || \
-#		{ echo "TEXT_BASE = 0xFF800000" >$(obj)board/icecube/config.tmp ; \
-#		  echo "... with 8 MB flash only" ; \
-#		  $(XECHO) "... with LOWBOOT configuration" ; \
-#		}
-#	@[ -z "$(findstring DDR,$@)" ] || \
-#		{ echo "#define CONFIG_MPC5200_DDR"	>>$(obj)include/config.h ; \
-#		  $(XECHO) "... DDR memory revision" ; \
-#		}
-#	@[ -z "$(findstring 5200,$@)" ] || \
-#		{ echo "#define CONFIG_MPC5200"		>>$(obj)include/config.h ; \
-#		  $(XECHO) "... with MPC5200 processor" ; \
-#		}
-#	@[ -z "$(findstring 5100,$@)" ] || \
-#		{ echo "#define CONFIG_MGT5100"		>>$(obj)include/config.h ; \
-#		  $(XECHO) "... with MGT5100 processor" ; \
-#		}
-#	@$(MKCONFIG) -a IceCube ppc mpc5xxx icecube
-#
-#lite5200b_config	\
-#lite5200b_PM_config	\
-#lite5200b_LOWBOOT_config:	unconfig
-#	@mkdir -p $(obj)include
-#	@mkdir -p $(obj)board/icecube
-#	@ echo "#define CONFIG_MPC5200_DDR"	>>$(obj)include/config.h
-#	@ $(XECHO) "... DDR memory revision"
-#	@ echo "#define CONFIG_MPC5200"		>>$(obj)include/config.h
-#	@ echo "#define CONFIG_LITE5200B"	>>$(obj)include/config.h
-#	@[ -z "$(findstring _PM_,$@)" ] || \
-#		{ echo "#define CONFIG_LITE5200B_PM"	>>$(obj)include/config.h ; \
-#		  $(XECHO) "... with power management (low-power mode) support" ; \
-#		}
-#	@[ -z "$(findstring LOWBOOT_,$@)" ] || \
-#		{ echo "TEXT_BASE = 0xFF000000" >$(obj)board/icecube/config.tmp ; \
-#		  $(XECHO) "... with LOWBOOT configuration" ; \
-#		}
-#	@ $(XECHO) "... with MPC5200B processor"
-#	@$(MKCONFIG) -a IceCube  ppc mpc5xxx icecube
-#
+#	@[ -z "$(findstring LOWBOOT_,$@)" ] || 
+#	echo "TEXT_BASE = 0xFF000000" >$(obj)board/config.tmp ; 
+#  	echo "... with LOWBOOT configuration" ; 
+	@echo "----------------end----------------------------------x"
+
 #mcc200_config	\
 #mcc200_SDRAM_config	\
 #mcc200_highboot_config	\
@@ -724,8 +652,6 @@ unconfig:
 #	{   	echo "#define CONFIG_MVBC_P" 	>>$(obj)include/config.h; }
 #	@$(MKCONFIG) -n $@ -a MVBC_P ppc mpc5xxx mvbc_p matrix_vision
 #
-#o2dnt_config:	unconfig
-#	@$(MKCONFIG) o2dnt ppc mpc5xxx o2dnt
 #
 #pcm030_config \
 #pcm030_LOWBOOT_config:	unconfig

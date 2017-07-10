@@ -43,7 +43,8 @@ all:mkboot
 # Tool invocations
 .PHONY:mkboot
 mkboot:
-	cd boot && make 	#make -C boot -f Makefile
+	cd boot && make test
+#	unconfig  test #mini2440_config  #make -C boot -f Makefile 
 	
 hello: $(OBJS)
 	g++  -o "hello" $(OBJS) $(USER_OBJS) $(LIBS)  

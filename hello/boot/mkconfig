@@ -8,9 +8,40 @@
 # (C) 2002-2006 DENX Software Engineering, Wolfgang Denk <wd@denx.de>
 #
 
+
+## test #######################################################
+###############################################################
+echo "----- test---"
+#while [ $# -ne 0 ] ; do
+#	echo $1
+#	shift
+#done
+
+#echo "-- \$* 演示 ---"
+#for i in "$*"; do
+#    echo $i
+#   echo ''
+#done
+
+#echo $#
+#echo $0
+#echo $*
+#echo $@
+#echo "-- \$@ 演示 ---"
+for i in "$@"; do
+    echo $i
+done
+
+#echo  $-
+#echo  $?
+
+echo "ARCH"=${ARCH}
+################################################################
+
 APPEND=no	# Default: Create new config file
 BOARD_NAME=""	# Name to print in make output
 TARGETS=""
+
 
 while [ $# -gt 0 ] ; do
 	case "$1" in
@@ -21,6 +52,7 @@ while [ $# -gt 0 ] ; do
 	*)  break ;;
 	esac
 done
+
 
 [ "${BOARD_NAME}" ] || BOARD_NAME="$1"
 
@@ -37,6 +69,7 @@ echo "Configuring for ${BOARD_NAME} board..."
 #
 # Create link to architecture specific headers
 #
+
 if [ "$SRCTREE" != "$OBJTREE" ] ; then
 	mkdir -p ${OBJTREE}/include
 	mkdir -p ${OBJTREE}/include2
@@ -51,11 +84,11 @@ if [ "$SRCTREE" != "$OBJTREE" ] ; then
 	ln -s asm-$2 asm
 else
 	cd ./include
-	rm -f asm
-	ln -s asm-$2 asm
+#	rm -rf asm
+#	ln -s asm-$2 asm
 fi
 
-rm -f asm-$2/arch
+rm -rf asm-$2/arch
 
 if [ -z "$6" -o "$6" = "NULL" ] ; then
 	ln -s ${LNPREFIX}arch-$3 asm-$2/arch
@@ -64,9 +97,13 @@ else
 fi
 
 if [ "$2" = "arm" ] ; then
-	rm -f asm-$2/proc
+	rm -rf asm-$2/proc
 	ln -s ${LNPREFIX}proc-armv asm-$2/proc
 fi
+
+#windows 下无法创建软件连接，是直接复制文件
+	rm -rf asm
+	ln -s asm-$2 asm
 
 #
 # Create include file for Make
