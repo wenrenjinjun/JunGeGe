@@ -38,16 +38,13 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-.PHONY:boot
-boot:
-	make -C boot -f Makefile
-#-f  boot/Makefile  
-
-all:
-	@echo »’ƒ„œ»»À	
-#all: hello
+all:mkboot
 
 # Tool invocations
+.PHONY:mkboot
+mkboot:
+	cd boot && make 	#make -C boot -f Makefile
+	
 hello: $(OBJS)
 	g++  -o "hello" $(OBJS) $(USER_OBJS) $(LIBS)  
 	#make -C start/

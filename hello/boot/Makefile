@@ -166,55 +166,24 @@ ifeq ($(obj)include/config.mk,$(wildcard $(obj)include/config.mk))
 # to all top level build files.  We need the dummy all: target to prevent the
 # dependency target in autoconf.mk.dep from being the default.
 all:
-#sinclude $(obj)include/autoconf.mk.dep	#所有头文件
-#sinclude $(obj)include/autoconf.mk		#所有CONFIG
 
+#7.xxx
+sinclude $(obj)include/autoconf.mk.dep	#所有头文件
+sinclude $(obj)include/autoconf.mk		#所有CONFIG
+	
 # load ARCH, BOARD, and CPU configuration
-#include $(obj)include/config.mk
-#export	ARCH CPU BOARD VENDOR SOC
-#CROSS_COMPILE =  arm-linux-
+include $(obj)include/config.mk
+export	ARCH CPU BOARD VENDOR SOC
+
 # set default to nothing for native builds
-#ifeq ($(HOSTARCH),$(ARCH))
-#CROSS_COMPILE ?=
-#	@echo "1.设置版本"
-#	@echo ${U_BOOT_VERSION}
-#	@echo ${TIMESTAMP_FILE}
-#	@echo ${VERSION_FILE}
-#	@echo ""
-#	@echo "2.获取主机类型和主机系统"	#export	HOSTARCH HOSTOS SHELL
-#	@echo ${HOSTARCH}
-#	@echo ${HOSTOS}
-#	@echo ${SHELL}
-#	@echo ""
-#	@echo "3.静默模式"
-#	@echo ${VENDOR}
-#	@echo ${MAKEFLAGS}
-#	@echo ${XECHO}
-#	@echo ""
-#	@echo "4.目标目录"	#export	TOPDIR SRCTREE OBJTREE
-#	@echo ${BUILD_DIR}
-##@echo ${saved-output}
-#	echo $(shell pwd)
-#	echo ${CURDIR}
-#	@echo ${OBJTREE}
-#	@echo ${SRCTREE}
-#	@echo ${TOPDIR}
-#	@echo ${LNDIR}
-#	@echo ""
-#	@echo "5.定义MKCONFIG等环境变量"	#export MKCONFIG REMOTE_BUILD
-#	@echo ${MKCONFIG}
-#	@echo ${REMOTE_BUILD}			#export REMOTE_BUILD
-#	@echo ${obj}					#export obj src
-#	@echo ${src}
-#	@echo ""
-	@echo "6.xxx"	
-	@echo ${ARCH}
-	@echo ${SUBDIRS}
-#endif
+ifeq ($(HOSTARCH),$(ARCH))
+CROSS_COMPILE ?=
+#CROSS_COMPILE =  arm-linux-
+endif
 
 # load other configuration
-#include $(TOPDIR)/config.mk
-#
+include $(TOPDIR)/config.mk
+
 ##########################################################################
 ## U-Boot objects....order is important (i.e. start must be first)
 #
@@ -505,6 +474,54 @@ all:
 #	mv $@.tmp $@
 #
 ##########################################################################
+
+all:
+#	@echo "1.设置版本"
+#	@echo ${U_BOOT_VERSION}
+#	@echo ${TIMESTAMP_FILE}
+#	@echo ${VERSION_FILE}
+#	@echo ""
+#	@echo "2.获取主机类型和主机系统"	#export	HOSTARCH HOSTOS SHELL
+#	@echo ${HOSTARCH}
+#	@echo ${HOSTOS}
+#	@echo ${SHELL}
+#	@echo ""
+#	@echo "3.静默模式"
+#	@echo ${VENDOR}
+#	@echo ${MAKEFLAGS}
+#	@echo ${XECHO}
+#	@echo ""
+#	@echo "4.目标目录"	#export	TOPDIR SRCTREE OBJTREE
+#	@echo ${BUILD_DIR}
+##@echo ${saved-output}
+#	echo $(shell pwd)
+#	echo ${CURDIR}
+#	@echo ${OBJTREE}
+#	@echo ${SRCTREE}
+#	@echo ${TOPDIR}
+#	@echo ${LNDIR}
+#	@echo ""
+#	@echo "5.定义MKCONFIG等环境变量"	#export MKCONFIG REMOTE_BUILD
+#	@echo ${MKCONFIG}
+#	@echo ${REMOTE_BUILD}			#export REMOTE_BUILD
+#	@echo ${obj}					#export obj src
+#	@echo ${src}
+#	@echo ""
+#	@echo "6.xxx"	
+#	@echo ${ARCH}
+#	@echo ${SUBDIRS}
+	@echo ""
+	@echo "7.xxx"	#export	ARCH CPU BOARD VENDOR SOC
+	@echo ${ARCH}
+	@echo ${CPU}
+	@echo ${BOARD}
+	@echo ${VENDOR}
+	@echo ${SOC}
+	@echo ${TOPDIR}
+	@echo ${MAKE}
+	@echo ""	
+
+
 else	# !config.mk
 all:
 #all $(obj)u-boot.hex $(obj)u-boot.srec $(obj)u-boot.bin \
@@ -520,27 +537,28 @@ tools-all:
 	$(MAKE) -C tools HOST_TOOLS_ALL=y
 endif	# config.mk
 
-#.PHONY : CHANGELOG
-#CHANGELOG:
-#	git log --no-merges U-Boot-1_1_5.. | \
-#	unexpand -a | sed -e 's/\s\s*$$//' > $@
-#
-#include/license.h: tools/bin2header COPYING
-#	 cat COPYING | gzip -9 -c | ./tools/bin2header license_gzip > include/license.h
+.PHONY : CHANGELOG
+CHANGELOG:
+	git log --no-merges U-Boot-1_1_5.. | \
+	unexpand -a | sed -e 's/\s\s*$$//' > $@
+
+include/license.h: tools/bin2header COPYING
+	 cat COPYING | gzip -9 -c | ./tools/bin2header license_gzip > include/license.h
+
 ##########################################################################
 #
-#unconfig:
-#	@rm -f $(obj)include/config.h $(obj)include/config.mk \
-#		$(obj)board/*/config.tmp $(obj)board/*/*/config.tmp \
-#		$(obj)include/autoconf.mk $(obj)include/autoconf.mk.dep
-#
-#%: %_config
-#	$(MAKE)
-#
-##========================================================================
-## PowerPC
-##========================================================================
-#
+unconfig:
+	@rm -f $(obj)include/config.h $(obj)include/config.mk \
+		$(obj)board/*/config.tmp $(obj)board/*/*/config.tmp \
+		$(obj)include/autoconf.mk $(obj)include/autoconf.mk.dep
+
+%: %_config
+	$(MAKE)
+
+#========================================================================
+# PowerPC
+#========================================================================
+
 #digsy_mtc_config \
 #digsy_mtc_LOWBOOT_config	\
 #digsy_mtc_RAMBOOT_config:	unconfig
@@ -603,15 +621,6 @@ endif	# config.mk
 #		  $(XECHO) "... with MGT5100 processor" ; \
 #		}
 #	@$(MKCONFIG) -a IceCube ppc mpc5xxx icecube
-#
-#jupiter_config:	unconfig
-#	@$(MKCONFIG) jupiter ppc mpc5xxx jupiter
-#
-#inka4x0_config:	unconfig
-#	@$(MKCONFIG) inka4x0 ppc mpc5xxx inka4x0
-#
-#ipek01_config: unconfig
-#	@$(MKCONFIG) -a ipek01 ppc mpc5xxx ipek01
 #
 #lite5200b_config	\
 #lite5200b_PM_config	\
@@ -702,9 +711,6 @@ endif	# config.mk
 #		}
 #	@$(MKCONFIG) -a pcm030 ppc mpc5xxx pcm030 phytec
 #
-#pf5200_config:	unconfig
-#	@$(MKCONFIG) pf5200  ppc mpc5xxx pf5200 esd
-#
 #PM520_config \
 #PM520_DDR_config \
 #PM520_ROMBOOT_config \
@@ -719,12 +725,6 @@ endif	# config.mk
 #		  $(XECHO) "... booting from 8-bit flash" ; \
 #		}
 #	@$(MKCONFIG) -a PM520 ppc mpc5xxx pm520
-#
-#smmaco4_config: unconfig
-#	@$(MKCONFIG) -a smmaco4 ppc mpc5xxx tqm5200 tqc
-#
-#spieval_config:	unconfig
-#	@$(MKCONFIG) -a spieval ppc mpc5xxx tqm5200 tqc
 #
 #TB5200_B_config \
 #TB5200_config:	unconfig
@@ -817,11 +817,6 @@ endif	# config.mk
 #		}
 #	@$(MKCONFIG) -n $@ -a TQM5200 ppc mpc5xxx tqm5200 tqc
 #
-#uc101_config:		unconfig
-#	@$(MKCONFIG) uc101 ppc mpc5xxx uc101
-#
-#v38b_config: unconfig
-#	@$(MKCONFIG) -a v38b ppc mpc5xxx v38b
 #
 ##########################################################################
 ### MPC512x Systems
@@ -1204,20 +1199,6 @@ endif	# config.mk
 #		tr '[:lower:]' '[:upper:]')" >$(obj)include/config.h
 #	@$(MKCONFIG) -n $@ -a intip ppc ppc4xx intip gdsys
 #
-#JSE_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc ppc4xx jse
-#
-#KAREF_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc ppc4xx karef sandburst
-#
-#katmai_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc ppc4xx katmai amcc
-#
-## Kilauea & Haleakala images are identical (recognized via PVR)
-#kilauea_config \
-#haleakala_config: unconfig
-#	@$(MKCONFIG) -n $@ -a kilauea ppc ppc4xx kilauea amcc
-#
 #kilauea_nand_config \
 #haleakala_nand_config: unconfig
 #	@mkdir -p $(obj)include $(obj)board/amcc/kilauea
@@ -1226,18 +1207,6 @@ endif	# config.mk
 #	@$(MKCONFIG) -n $@ -a kilauea ppc ppc4xx kilauea amcc
 #	@echo "TEXT_BASE = 0x01000000" > $(obj)board/amcc/kilauea/config.tmp
 #	@echo "CONFIG_NAND_U_BOOT = y" >> $(obj)include/config.mk
-#
-#korat_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc ppc4xx korat
-#
-#luan_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc ppc4xx luan amcc
-#
-#lwmon5_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc ppc4xx lwmon5
-#
-#makalu_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc ppc4xx makalu amcc
 #
 #mcu25_config:  unconfig
 #	@mkdir -p $(obj)board/netstal/common
@@ -1384,8 +1353,6 @@ endif	# config.mk
 ##########################################################################
 #xtract_82xx = $(subst _BIGFLASH,,$(subst _ROMBOOT,,$(subst _L2,,$(subst _266MHz,,$(subst _300MHz,,$(subst _config,,$1))))))
 #
-#
-#
 #CPC45_config	\
 #CPC45_ROMBOOT_config:	unconfig
 #	@$(MKCONFIG) $(call xtract_82xx,$@) ppc mpc824x cpc45
@@ -1399,21 +1366,6 @@ endif	# config.mk
 #	fi; \
 #	echo "export CONFIG_BOOT_ROM" >> config.mk;
 #
-#CU824_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x cu824
-#
-#debris_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x debris etin
-#
-#eXalion_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x eXalion
-#
-#HIDDEN_DRAGON_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x hidden_dragon
-#
-#kvme080_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x kvme080 etin
-#
 ## HDLAN is broken ATM. Should be fixed as soon as hardware is available and as
 ## time permits.
 ##linkstation_HDLAN_config \
@@ -1426,32 +1378,6 @@ endif	# config.mk
 #	esac
 #	@$(MKCONFIG) -n $@ -a linkstation ppc mpc824x linkstation
 #
-#MOUSSE_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x mousse
-#
-#MUSENKI_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x musenki
-#
-#MVBLUE_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x mvblue
-#
-#OXC_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x oxc
-#
-#PN62_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x pn62
-#
-#Sandpoint8240_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x sandpoint
-#
-#Sandpoint8245_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x sandpoint
-#
-#sbc8240_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x sbc8240
-#
-#utx8245_config: unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc824x utx8245
 #
 ##########################################################################
 ### MPC8260 Systems
@@ -1608,21 +1534,6 @@ endif	# config.mk
 #	@echo "#define CONFIG_MPC8248" > $(obj)include/config.h)
 #	@$(MKCONFIG) -a Rattler ppc mpc8260 rattler
 #
-#RPXsuper_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc8260 rpxsuper
-#
-#rsdproto_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc8260 rsdproto
-#
-#sacsng_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc8260 sacsng
-#
-#sbc8260_config:	unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc8260 sbc8260
-#
-#SCM_config:		unconfig
-#	@$(MKCONFIG) $(@:_config=) ppc mpc8260 SCM siemens
-#
 #TQM8255_AA_config \
 #TQM8260_AA_config \
 #TQM8260_AB_config \
@@ -1729,18 +1640,6 @@ endif	# config.mk
 #	fi
 #	@$(MKCONFIG) -a M5235EVB m68k mcf523x m5235evb freescale
 #
-#M5249EVB_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 m5249evb freescale
-#
-#M5253DEMO_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 m5253demo freescale
-#
-#M5253EVBE_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 m5253evbe freescale
-#
-#cobra5272_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 cobra5272
-#
 #EB+MCF-EV123_config :		unconfig
 #	@mkdir -p $(obj)include
 #	@mkdir -p $(obj)board/BuS/EB+MCF-EV123
@@ -1753,23 +1652,6 @@ endif	# config.mk
 #	@echo "TEXT_BASE = 0xF0000000"|tee $(obj)board/BuS/EB+MCF-EV123/textbase.mk
 #	@$(MKCONFIG) EB+MCF-EV123 m68k mcf52x2 EB+MCF-EV123 BuS
 #
-#idmr_config :			unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 idmr
-#
-#M5271EVB_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 m5271evb freescale
-#
-#M5272C3_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 m5272c3 freescale
-#
-#M5275EVB_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 m5275evb freescale
-#
-#M5282EVB_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 m5282evb freescale
-#
-#M53017EVB_config :		unconfig
-#	@$(MKCONFIG) $(@:_config=) m68k mcf532x m53017evb freescale
 #
 #M5329AFEE_config \
 #M5329BFEE_config :	unconfig
@@ -3222,25 +3104,6 @@ endif	# config.mk
 #		}
 #	@$(MKCONFIG) -a DK1S10 nios nios dk1s10 altera
 #
-##########################################################################
-### Nios-II
-##########################################################################
-#
-#EP1C20_config : unconfig
-#	@$(MKCONFIG)  EP1C20 nios2 nios2 ep1c20 altera
-#
-#EP1S10_config : unconfig
-#	@$(MKCONFIG)  EP1S10 nios2 nios2 ep1s10 altera
-#
-#EP1S40_config : unconfig
-#	@$(MKCONFIG)  EP1S40 nios2 nios2 ep1s40 altera
-#
-#PK1C20_config : unconfig
-#	@$(MKCONFIG)  PK1C20 nios2 nios2 pk1c20 psyent
-#
-#PCI5441_config : unconfig
-#	@$(MKCONFIG)  PCI5441 nios2 nios2 pci5441 psyent
-#
 ##========================================================================
 ### Microblaze
 ##========================================================================
@@ -3301,10 +3164,6 @@ endif	# config.mk
 #
 #mimc200_config		:	unconfig
 #	@$(MKCONFIG) $(@:_config=) avr32 at32ap mimc200 mimc at32ap700x
-#
-##========================================================================
-## SH3 (SuperH)
-##========================================================================
 #
 ##########################################################################
 ### sh2 (Renesas SuperH)
@@ -3385,76 +3244,76 @@ endif	# config.mk
 #	@mkdir -p $(obj)include
 #	@echo "#define CONFIG_ESPT 1" > $(obj)include/config.h
 #	@$(MKCONFIG) -a $(@:_config=) sh sh4 espt
-#
-#
-##########################################################################
-##########################################################################
-##########################################################################
-#
-#clean:
-#	@rm -f $(obj)examples/standalone/82559_eeprom			  \
-#	       $(obj)examples/standalone/atmel_df_pow2			  \
-#	       $(obj)examples/standalone/eepro100_eeprom		  \
-#	       $(obj)examples/standalone/hello_world			  \
-#	       $(obj)examples/standalone/interrupt			  \
-#	       $(obj)examples/standalone/mem_to_mem_idma2intr		  \
-#	       $(obj)examples/standalone/sched				  \
-#	       $(obj)examples/standalone/smc91111_eeprom		  \
-#	       $(obj)examples/standalone/test_burst			  \
-#	       $(obj)examples/standalone/timer
-#	@rm -f $(obj)examples/api/demo{,.bin}
-#	@rm -f $(obj)tools/bmp_logo	   $(obj)tools/easylogo/easylogo  \
-#	       $(obj)tools/env/{fw_printenv,fw_setenv}			  \
-#	       $(obj)tools/envcrc					  \
-#	       $(obj)tools/gdb/{astest,gdbcont,gdbsend}			  \
-#	       $(obj)tools/gen_eth_addr    $(obj)tools/img2srec		  \
-#	       $(obj)tools/mkimage	   $(obj)tools/mpc86x_clk	  \
-#	       $(obj)tools/ncb		   $(obj)tools/ubsha1
-#	@rm -f $(obj)board/cray/L1/{bootscript.c,bootscript.image}	  \
-#	       $(obj)board/netstar/{eeprom,crcek,crcit,*.srec,*.bin}	  \
-#	       $(obj)board/trab/trab_fkt   $(obj)board/voiceblue/eeprom   \
-#	       $(obj)board/armltd/{integratorap,integratorcp}/u-boot.lds  \
-#	       $(obj)lib_blackfin/u-boot.lds				  \
-#	       $(obj)u-boot.lds						  \
-#	       $(obj)cpu/blackfin/bootrom-asm-offsets.[chs]
-#	@rm -f $(obj)include/bmp_logo.h
-#	@rm -f $(obj)nand_spl/{u-boot.lds,u-boot-spl,u-boot-spl.map,System.map}
-#	@rm -f $(obj)onenand_ipl/onenand-{ipl,ipl.bin,ipl.map}
-#	@rm -f $(ONENAND_BIN)
-#	@rm -f $(obj)onenand_ipl/u-boot.lds
-#	@rm -f $(TIMESTAMP_FILE) $(VERSION_FILE)
-#	@find $(OBJTREE) -type f \
-#		\( -name 'core' -o -name '*.bak' -o -name '*~' \
-#		-o -name '*.o'	-o -name '*.a' -o -name '*.exe'	\) -print \
-#		| xargs rm -f
-#
-#clobber:	clean
-#	@find $(OBJTREE) -type f \( -name .depend \
-#		-o -name '*.srec' -o -name '*.bin' -o -name u-boot.img \) \
-#		-print0 \
-#		| xargs -0 rm -f
-#	@rm -f $(OBJS) $(obj)*.bak $(obj)ctags $(obj)etags $(obj)TAGS \
-#		$(obj)cscope.* $(obj)*.*~
-#	@rm -f $(obj)u-boot $(obj)u-boot.map $(obj)u-boot.hex $(ALL)
-#	@rm -f $(obj)u-boot.kwb
-#	@rm -f $(obj)u-boot.imx
-#	@rm -f $(obj)tools/{env/crc32.c,inca-swap-bytes}
-#	@rm -f $(obj)cpu/mpc824x/bedbug_603e.c
-#	@rm -f $(obj)include/asm/proc $(obj)include/asm/arch $(obj)include/asm
-#	@[ ! -d $(obj)nand_spl ] || find $(obj)nand_spl -name "*" -type l -print | xargs rm -f
-#	@[ ! -d $(obj)onenand_ipl ] || find $(obj)onenand_ipl -name "*" -type l -print | xargs rm -f
-#
-#ifeq ($(OBJTREE),$(SRCTREE))
-#mrproper \
-#distclean:	clobber unconfig
-#else
-#mrproper \
-#distclean:	clobber unconfig
-#	rm -rf $(obj)*
-#endif
-#
-#backup:
-#	F=`basename $(TOPDIR)` ; cd .. ; \
-#	gtar --force-local -zcvf `date "+$$F-%Y-%m-%d-%T.tar.gz"` $$F
-#
-##########################################################################
+
+
+#########################################################################
+#########################################################################
+#########################################################################
+
+clean:
+	@rm -f $(obj)examples/standalone/82559_eeprom			  \
+	       $(obj)examples/standalone/atmel_df_pow2			  \
+	       $(obj)examples/standalone/eepro100_eeprom		  \
+	       $(obj)examples/standalone/hello_world			  \
+	       $(obj)examples/standalone/interrupt			  \
+	       $(obj)examples/standalone/mem_to_mem_idma2intr		  \
+	       $(obj)examples/standalone/sched				  \
+	       $(obj)examples/standalone/smc91111_eeprom		  \
+	       $(obj)examples/standalone/test_burst			  \
+	       $(obj)examples/standalone/timer
+	@rm -f $(obj)examples/api/demo{,.bin}
+	@rm -f $(obj)tools/bmp_logo	   $(obj)tools/easylogo/easylogo  \
+	       $(obj)tools/env/{fw_printenv,fw_setenv}			  \
+	       $(obj)tools/envcrc					  \
+	       $(obj)tools/gdb/{astest,gdbcont,gdbsend}			  \
+	       $(obj)tools/gen_eth_addr    $(obj)tools/img2srec		  \
+	       $(obj)tools/mkimage	   $(obj)tools/mpc86x_clk	  \
+	       $(obj)tools/ncb		   $(obj)tools/ubsha1
+	@rm -f $(obj)board/cray/L1/{bootscript.c,bootscript.image}	  \
+	       $(obj)board/netstar/{eeprom,crcek,crcit,*.srec,*.bin}	  \
+	       $(obj)board/trab/trab_fkt   $(obj)board/voiceblue/eeprom   \
+	       $(obj)board/armltd/{integratorap,integratorcp}/u-boot.lds  \
+	       $(obj)lib_blackfin/u-boot.lds				  \
+	       $(obj)u-boot.lds						  \
+	       $(obj)cpu/blackfin/bootrom-asm-offsets.[chs]
+	@rm -f $(obj)include/bmp_logo.h
+	@rm -f $(obj)nand_spl/{u-boot.lds,u-boot-spl,u-boot-spl.map,System.map}
+	@rm -f $(obj)onenand_ipl/onenand-{ipl,ipl.bin,ipl.map}
+	@rm -f $(ONENAND_BIN)
+	@rm -f $(obj)onenand_ipl/u-boot.lds
+	@rm -f $(TIMESTAMP_FILE) $(VERSION_FILE)
+	@find $(OBJTREE) -type f \
+		\( -name 'core' -o -name '*.bak' -o -name '*~' \
+		-o -name '*.o'	-o -name '*.a' -o -name '*.exe'	\) -print \
+		| xargs rm -f
+
+clobber:	clean
+	@find $(OBJTREE) -type f \( -name .depend \
+		-o -name '*.srec' -o -name '*.bin' -o -name u-boot.img \) \
+		-print0 \
+		| xargs -0 rm -f
+	@rm -f $(OBJS) $(obj)*.bak $(obj)ctags $(obj)etags $(obj)TAGS \
+		$(obj)cscope.* $(obj)*.*~
+	@rm -f $(obj)u-boot $(obj)u-boot.map $(obj)u-boot.hex $(ALL)
+	@rm -f $(obj)u-boot.kwb
+	@rm -f $(obj)u-boot.imx
+	@rm -f $(obj)tools/{env/crc32.c,inca-swap-bytes}
+	@rm -f $(obj)cpu/mpc824x/bedbug_603e.c
+	@rm -f $(obj)include/asm/proc $(obj)include/asm/arch $(obj)include/asm
+	@[ ! -d $(obj)nand_spl ] || find $(obj)nand_spl -name "*" -type l -print | xargs rm -f
+	@[ ! -d $(obj)onenand_ipl ] || find $(obj)onenand_ipl -name "*" -type l -print | xargs rm -f
+
+ifeq ($(OBJTREE),$(SRCTREE))
+mrproper \
+distclean:	clobber unconfig
+else
+mrproper \
+distclean:	clobber unconfig
+	rm -rf $(obj)*
+endif
+
+backup:
+	F=`basename $(TOPDIR)` ; cd .. ; \
+	gtar --force-local -zcvf `date "+$$F-%Y-%m-%d-%T.tar.gz"` $$F
+
+#########################################################################
