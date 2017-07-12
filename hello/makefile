@@ -44,7 +44,7 @@ all:mkboot
 .PHONY:mkboot
 mkboot:
 	cd boot && make 
-#	unconfig  test #mini2440_config  #make -C boot -f Makefile 
+#	unconfig  test #mini2440_config  #make -C boot -f Makefile distclean  
 	
 hello: $(OBJS)
 	g++  -o "hello" $(OBJS) $(USER_OBJS) $(LIBS)  

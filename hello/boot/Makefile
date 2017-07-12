@@ -147,10 +147,9 @@ endif
 
 # The "tools" are needed early, so put this first
 # Don't include stuff already done in $(LIBS)
-SUBDIRS	= tools \
-	  examples/standalone \
+SUBDIRS	=  tools examples/standalone \
 	  examples/api
-
+#tools \
 .PHONY : $(SUBDIRS)
 
 #是否已经 配置过make config 
@@ -206,8 +205,8 @@ OBJS := $(addprefix $(obj),$(OBJS))
 LIBS  = lib_generic/libgeneric.a
 LIBS += lib_generic/lzma/liblzma.a
 LIBS += lib_generic/lzo/liblzo.a
-#LIBS += $(shell if [ -f board/$(VENDOR)/common/Makefile ]; then echo \
-#	"board/$(VENDOR)/common/lib$(VENDOR).a"; fi)
+LIBS += $(shell if [ -f board/$(VENDOR)/common/Makefile ]; then echo \
+	"board/$(VENDOR)/common/lib$(VENDOR).a"; fi)
 
 #cpu 产品
 LIBS += cpu/$(CPU)/lib$(CPU).a
@@ -387,7 +386,7 @@ GEN_UBOOT = \
 		cd $(LNDIR) && $(LD) $(LDFLAGS) $$UNDEF_SYM $(__OBJS) \
 			--start-group $(__LIBS) --end-group $(PLATFORM_LIBS) \
 			-Map u-boot.map -o u-boot
-$(obj)u-boot:	depend #$(SUBDIRS) $(OBJS) $(LIBBOARD) $(LIBS) $(LDSCRIPT) $(obj)u-boot.lds
+$(obj)u-boot:	depend #$(SUBDIRS) #$(OBJS) $(LIBBOARD) $(LIBS) $(LDSCRIPT) $(obj)u-boot.lds
 #		$(GEN_UBOOT)
 
 ifeq ($(CONFIG_KALLSYMS),y)
@@ -429,8 +428,8 @@ $(U_BOOT_ONENAND):	$(ONENAND_IPL) $(obj)u-boot.bin
 		cat $(ONENAND_BIN) $(obj)u-boot.bin > $(obj)u-boot-onenand.bin
 
 $(VERSION_FILE):
-		@( printf '#define U_BOOT_VERSION "U-Boot %s%s"\n' "$(U_BOOT_VERSION)" \
-		 '$(shell $(TOPDIR)/tools/setlocalversion $(TOPDIR))' ) > $@.tmp
+		@( printf '#define U_BOOT_VERSION "U-Boot %s%s"\n' "$(U_BOOT_VERSION)" ) > $@.tmp 
+#		  '$(shell $(TOPDIR)/tools/setlocalversion $(TOPDIR))'	#todo需要研究
 		@cmp -s $@ $@.tmp && rm -f $@.tmp || mv -f $@.tmp $@
 
 $(TIMESTAMP_FILE):
@@ -448,9 +447,14 @@ env:
 
 # Explicitly make _depend in subdirs containing multiple targets to prevent
 # parallel sub-makes creating .depend files simultaneously.
-depend dep:	$(TIMESTAMP_FILE) $(VERSION_FILE) #$(obj)include/autoconf.mk
-#		for dir in $(SUBDIRS) cpu/$(CPU) $(dir $(LDSCRIPT)) ; do \
-#			$(MAKE) -C $$dir _depend ; done
+depend dep:	$(TIMESTAMP_FILE) $(VERSION_FILE) $(obj)include/autoconf.mk
+#
+#		@echo ${SUBDIRS}
+#		@echo cpu/$(CPU)
+		@echo $(LDSCRIPT)
+		@echo $(TEXT_BASE)
+		for dir in  $(SUBDIRS) cpu/$(CPU) $(dir $(LDSCRIPT)) ; do \
+			$(MAKE) -C $$dir _depend ; done
 
 TAG_SUBDIRS = $(SUBDIRS)
 TAG_SUBDIRS += $(dir $(__LIBS))
@@ -480,28 +484,28 @@ $(obj)System.map:	#$(obj)u-boot
 # This target actually generates 2 files; autoconf.mk and autoconf.mk.dep.
 # the dep file is only include in this top level makefile to determine when
 # to regenerate the autoconf.mk file.
-#$(obj)include/autoconf.mk.dep: $(obj)include/config.h include/common.h
-#	@$(XECHO) Generating $@ ; \
-#	set -e ; \
-#	: Generate the dependancies ; \
-#	$(CC) -x c -DDO_DEPS_ONLY -M $(HOSTCFLAGS) $(CPPFLAGS) \
-#		-MQ $(obj)include/autoconf.mk include/common.h > $@
-#
-#$(obj)include/autoconf.mk: $(obj)include/config.h
-#	@$(XECHO) Generating $@ ; \
-#	set -e ; \
-#	: Extract the config macros ; \
-#	$(CPP) $(CFLAGS) -DDO_DEPS_ONLY -dM include/common.h | \
-#		sed -n -f tools/scripts/define2mk.sed > $@.tmp && \
-#	mv $@.tmp $@
+$(obj)include/autoconf.mk.dep: $(obj)include/config.h include/common.h
+	@$(XECHO) Generating $@ ; \
+	set -e ; \
+	: Generate the dependancies ; \
+	$(CC) -x c -DDO_DEPS_ONLY -M $(HOSTCFLAGS) $(CPPFLAGS) \
+		-MQ $(obj)include/autoconf.mk include/common.h > $@
+
+$(obj)include/autoconf.mk: $(obj)include/config.h
+	@$(XECHO) Generating $@ ; \
+	set -e ; \
+	: Extract the config macros ; 
+	$(CPP) $(CFLAGS) -DDO_DEPS_ONLY -dM include/common.h | \
+		sed -n -f tools/scripts/define2mk.sed > $@.tmp && \
+	mv $@.tmp $@
 
 ##########################################################################
 else	# !config.mk
 all:
-#all $(obj)u-boot.hex $(obj)u-boot.srec $(obj)u-boot.bin \
-#$(obj)u-boot.img $(obj)u-boot.dis $(obj)u-boot \
-#$(filter-out tools,$(SUBDIRS)) $(TIMESTAMP_FILE) $(VERSION_FILE) gdbtools \
-#updater env depend dep tags ctags etags cscope $(obj)System.map:
+all $(obj)u-boot.hex $(obj)u-boot.srec $(obj)u-boot.bin \
+$(obj)u-boot.img $(obj)u-boot.dis $(obj)u-boot \
+$(filter-out tools,$(SUBDIRS)) $(TIMESTAMP_FILE) $(VERSION_FILE) gdbtools \
+updater env depend dep tags ctags etags cscope $(obj)System.map:
 	@echo "System not configured - see README" >&2
 	@ exit 1
 
@@ -591,6 +595,8 @@ test:
 #	@echo ${PLATFORM_LIBGCC}
 	
 	@echo "----------------test----------------------------------"
+	@echo $(LDSCRIPT)
+	@echo $(TEXT_BASE)
 #	@ >$(obj)include/config.h
 #	@[ -z "$(findstring LOWBOOT_,$@)" ] || 
 #	echo "TEXT_BASE = 0xFF000000" >$(obj)board/config.tmp ; 
@@ -674,7 +680,7 @@ clobber:	clean
 	@rm -f $(obj)u-boot.imx
 	@rm -f $(obj)tools/{env/crc32.c,inca-swap-bytes}
 	@rm -f $(obj)cpu/mpc824x/bedbug_603e.c
-	@rm -f $(obj)include/asm/proc $(obj)include/asm/arch $(obj)include/asm
+	@rm -rf $(obj)include/asm/proc $(obj)include/asm/arch $(obj)include/asm
 	@[ ! -d $(obj)nand_spl ] || find $(obj)nand_spl -name "*" -type l -print | xargs rm -f
 	@[ ! -d $(obj)onenand_ipl ] || find $(obj)onenand_ipl -name "*" -type l -print | xargs rm -f
 
