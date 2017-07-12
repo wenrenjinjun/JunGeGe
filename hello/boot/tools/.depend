@@ -1,0 +1,82 @@
+envcrc.o: \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/tools/envcrc.c \
+ c:\path\mingw\include\errno.h c:\path\mingw\include\_mingw.h \
+ c:\path\mingw\include\msvcrtver.h c:\path\mingw\include\w32api.h \
+ c:\path\mingw\include\sdkddkver.h c:\path\mingw\include\stdio.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stddef.h \
+ c:\path\mingw\include\sys/types.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stdarg.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stdint.h \
+ c:\path\mingw\include\stdint.h c:\path\mingw\include\stdlib.h \
+ c:\path\mingw\include\string.h c:\path\mingw\include\strings.h \
+ c:\path\mingw\include\wchar.h c:\path\mingw\include\unistd.h \
+ c:\path\mingw\include\io.h c:\path\mingw\include\sys\types.h \
+ c:\path\mingw\include\stdint.h c:\path\mingw\include\process.h \
+ c:\path\mingw\include\getopt.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config_defaults.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/configs/mini2440.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config_cmd_default.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/config.h
+gen_eth_addr.o: \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/tools/gen_eth_addr.c \
+ c:\path\mingw\include\stdio.h c:\path\mingw\include\_mingw.h \
+ c:\path\mingw\include\msvcrtver.h c:\path\mingw\include\w32api.h \
+ c:\path\mingw\include\sdkddkver.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stddef.h \
+ c:\path\mingw\include\sys/types.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stdarg.h \
+ c:\path\mingw\include\stdlib.h c:\path\mingw\include\unistd.h \
+ c:\path\mingw\include\io.h c:\path\mingw\include\sys\types.h \
+ c:\path\mingw\include\stdint.h c:\path\mingw\include\process.h \
+ c:\path\mingw\include\getopt.h c:\path\mingw\include\time.h
+img2srec.o: \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/tools/img2srec.c \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/tools/os_support.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/compiler.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stddef.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stdint.h \
+ c:\path\mingw\include\stdint.h c:\path\mingw\include\_mingw.h \
+ c:\path\mingw\include\msvcrtver.h c:\path\mingw\include\w32api.h \
+ c:\path\mingw\include\sdkddkver.h c:\path\mingw\include\errno.h \
+ c:\path\mingw\include\stdlib.h c:\path\mingw\include\stdio.h \
+ c:\path\mingw\include\sys/types.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stdarg.h \
+ c:\path\mingw\include\string.h c:\path\mingw\include\strings.h \
+ c:\path\mingw\include\wchar.h c:\path\mingw\include\fcntl.h \
+ c:\path\mingw\include\io.h c:\path\mingw\include\sys\types.h \
+ c:\path\mingw\include\stdint.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/tools/mingw_support.h \
+ c:\path\mingw\include\windows.h c:\path\mingw\include\windef.h \
+ c:\path\mingw\include\winnt.h c:\path\mingw\include\winerror.h \
+ c:\path\mingw\include\basetsd.h c:\path\mingw\include\pshpack4.h \
+ c:\path\mingw\include\poppack.h c:\path\mingw\include\wincon.h \
+ c:\path\mingw\include\winbase.h c:\path\mingw\include\wingdi.h \
+ c:\path\mingw\include\winuser.h c:\path\mingw\include\dbt.h \
+ c:\path\mingw\include\winnls.h c:\path\mingw\include\winver.h \
+ c:\path\mingw\include\winnetwk.h c:\path\mingw\include\winreg.h \
+ c:\path\mingw\include\winsvc.h c:\path\mingw\include\cderr.h \
+ c:\path\mingw\include\dde.h c:\path\mingw\include\ddeml.h \
+ c:\path\mingw\include\dlgs.h c:\path\mingw\include\imm.h \
+ c:\path\mingw\include\lzexpand.h c:\path\mingw\include\mmsystem.h \
+ c:\path\mingw\include\nb30.h c:\path\mingw\include\rpc.h \
+ c:\path\mingw\include\rpcdce.h c:\path\mingw\include\basetyps.h \
+ c:\path\mingw\include\rpcdcep.h c:\path\mingw\include\rpcnsi.h \
+ c:\path\mingw\include\rpcnterr.h c:\path\mingw\include\shellapi.h \
+ c:\path\mingw\include\pshpack2.h c:\path\mingw\include\winperf.h \
+ c:\path\mingw\include\commdlg.h c:\path\mingw\include\unknwn.h \
+ c:\path\mingw\include\objfwd.h c:\path\mingw\include\wtypes.h \
+ c:\path\mingw\include\rpcndr.h c:\path\mingw\include\rpcnsip.h \
+ c:\path\mingw\include\prsht.h c:\path\mingw\include\winspool.h \
+ c:\path\mingw\include\winsock2.h c:\path\mingw\include\ole2.h \
+ c:\path\mingw\include\objbase.h c:\path\mingw\include\objidl.h \
+ c:\path\mingw\include\cguid.h c:\path\mingw\include\olectlid.h \
+ c:\path\mingw\include\oleauto.h c:\path\mingw\include\oaidl.h \
+ c:\path\mingw\include\oleidl.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/tools/getline.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stdbool.h \
+ c:\path\mingw\include\ctype.h c:\path\mingw\include\wctype.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/elf.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/compiler.h \
+ c:\path\mingw\include\unistd.h c:\path\mingw\include\io.h \
+ c:\path\mingw\include\process.h c:\path\mingw\include\getopt.h

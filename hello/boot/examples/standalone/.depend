@@ -1,0 +1,100 @@
+hello_world.o: hello_world.c \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/common.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config_defaults.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/configs/mini2440.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config_cmd_default.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/config.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/bitops.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/types.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/bitops.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/proc/system.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/config.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/types.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/posix_types.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/stddef.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/posix_types.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/string.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/string.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/ptrace.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/proc/ptrace.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stdarg.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/part.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/ide.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/flash.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/image.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/compiler.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stddef.h \
+ C:/Path/MinGW/include/stdint.h C:/Path/MinGW/include/_mingw.h \
+ C:/Path/MinGW/include/msvcrtver.h C:/Path/MinGW/include/w32api.h \
+ C:/Path/MinGW/include/sdkddkver.h C:/Path/MinGW/include/errno.h \
+ C:/Path/MinGW/include/stdlib.h C:/Path/MinGW/include/stdio.h \
+ C:/Path/MinGW/include/sys/types.h C:/Path/MinGW/include/string.h \
+ C:/Path/MinGW/include/strings.h C:/Path/MinGW/include/wchar.h \
+ C:/Path/MinGW/include/fcntl.h C:/Path/MinGW/include/io.h \
+ C:/Path/MinGW/include/sys/types.h C:/Path/MinGW/include/stdint.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/fdt.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/libfdt.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/libfdt_env.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/fdt_support.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/u-boot.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/global_data.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/net.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/byteorder.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/byteorder/little_endian.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/byteorder/swab.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/byteorder/generic.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/u-boot/crc.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/exports.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/spi.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/_exports.h
+stubs.o: stubs.c \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/exports.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/common.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config_defaults.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/configs/mini2440.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/config_cmd_default.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/config.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/bitops.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/types.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/bitops.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/proc/system.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/config.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/types.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/posix_types.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/stddef.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/posix_types.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/string.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/string.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/ptrace.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/proc/ptrace.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stdarg.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/part.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/ide.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/flash.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/image.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/compiler.h \
+ c:\path\mingw\lib\gcc\mingw32\5.3.0\include\stddef.h \
+ C:/Path/MinGW/include/stdint.h C:/Path/MinGW/include/_mingw.h \
+ C:/Path/MinGW/include/msvcrtver.h C:/Path/MinGW/include/w32api.h \
+ C:/Path/MinGW/include/sdkddkver.h C:/Path/MinGW/include/errno.h \
+ C:/Path/MinGW/include/stdlib.h C:/Path/MinGW/include/stdio.h \
+ C:/Path/MinGW/include/sys/types.h C:/Path/MinGW/include/string.h \
+ C:/Path/MinGW/include/strings.h C:/Path/MinGW/include/wchar.h \
+ C:/Path/MinGW/include/fcntl.h C:/Path/MinGW/include/io.h \
+ C:/Path/MinGW/include/sys/types.h C:/Path/MinGW/include/stdint.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/fdt.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/libfdt.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/libfdt_env.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/fdt_support.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/u-boot.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/global_data.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/net.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/asm/byteorder.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/byteorder/little_endian.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/byteorder/swab.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/linux/byteorder/generic.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/u-boot/crc.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/spi.h \
+ c:/Users/JunGeGe/Documents/GitHub/JunGeGe/hello/boot/include/_exports.h
